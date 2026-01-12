@@ -4,9 +4,44 @@ Lab 02: Reading Markdown Files - Auto-grading Tests
 
 import pytest
 import os
+import nbformat
+from nbconvert.preprocessors import ExecutePreprocessor
 
-DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data')
-RUBELLA_PATH = os.path.join(DATA_DIR, 'rubella.md')
+# Get paths
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+NOTEBOOK_PATH = os.path.join(BASE_DIR, 'exercise', 'Lab02_Exercise.ipynb')
+DATA_DIR = os.path.join(BASE_DIR, 'data')
+
+
+@pytest.fixture(scope="session")
+def student_namespace():
+    """Execute student notebook and return namespace with variables."""
+    
+    with open(NOTEBOOK_PATH, 'r', encoding='utf-8') as f:
+        nb = nbformat.read(f, as_version=4)
+    
+    # Create namespace with proper working directory
+    namespace = {'__name__': '__main__'}
+    
+    # Change to exercise directory for relative paths to work
+    original_dir = os.getcwd()
+    exercise_dir = os.path.join(BASE_DIR, 'exercise')
+    os.chdir(exercise_dir)
+    
+    try:
+        for cell in nb.cells:
+            if cell.cell_type == 'code':
+                # Skip verification cells
+                if '# Quick check' in cell.source or '# Verification' in cell.source:
+                    continue
+                try:
+                    exec(cell.source, namespace)
+                except Exception as e:
+                    print(f"Cell execution warning: {e}")
+    finally:
+        os.chdir(original_dir)
+    
+    return namespace
 
 
 class TestExercise1:
@@ -69,40 +104,6 @@ class TestExercise4:
         expected = content.lower().count('symptom')
         actual = student_namespace.get('symptom_count', 0)
         assert actual == expected, f"symptom_count should be {expected}, got {actual}"
-
-
-@pytest.fixture(scope="session")
-def student_namespace():
-    """Execute student notebook and return namespace."""
-    import nbformat
-    from nbconvert.preprocessors import ExecutePreprocessor
-    
-    notebook_path = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-        'exercise', 'Lab02_Exercise.ipynb'
-    )
-    
-    with open(notebook_path, 'r', encoding='utf-8') as f:
-        nb = nbformat.read(f, as_version=4)
-    
-    ep = ExecutePreprocessor(timeout=60, kernel_name='python3')
-    
-    try:
-        ep.preprocess(nb, {'metadata': {'path': os.path.dirname(notebook_path)}})
-    except Exception as e:
-        print(f"Warning: {e}")
-    
-    namespace = {}
-    for cell in nb.cells:
-        if cell.cell_type == 'code':
-            if 'assert' in cell.source and 'Passed' in cell.source:
-                continue
-            try:
-                exec(cell.source, namespace)
-            except:
-                pass
-    
-    return namespace
 
 
 if __name__ == '__main__':

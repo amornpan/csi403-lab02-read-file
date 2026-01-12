@@ -44,66 +44,82 @@ def student_namespace():
     return namespace
 
 
-class TestExercise1:
-    """Test Exercise 1: Read File Content (25 points)"""
-    
-    def test_file_content_exists(self, student_namespace):
-        assert 'file_content' in student_namespace, "Variable 'file_content' not found"
-    
-    def test_file_content_is_string(self, student_namespace):
-        assert isinstance(student_namespace.get('file_content'), str), "file_content should be a string"
-    
-    def test_file_content_has_rubella(self, student_namespace):
-        content = student_namespace.get('file_content', '')
-        assert 'Rubella' in content, "file_content should contain 'Rubella'"
+# ============== Exercise 1: Read File Content (25 points) ==============
+
+def test_ex1_file_content_exists(student_namespace):
+    """Test that file_content variable exists"""
+    assert 'file_content' in student_namespace, "Variable 'file_content' not found"
 
 
-class TestExercise2:
-    """Test Exercise 2: Count Characters (25 points)"""
-    
-    def test_char_count_exists(self, student_namespace):
-        assert 'char_count' in student_namespace, "Variable 'char_count' not found"
-    
-    def test_char_count_is_int(self, student_namespace):
-        assert isinstance(student_namespace.get('char_count'), int), "char_count should be an integer"
-    
-    def test_char_count_correct(self, student_namespace):
-        content = student_namespace.get('file_content', '')
-        expected = len(content)
-        actual = student_namespace.get('char_count', 0)
-        assert actual == expected, f"char_count should be {expected}, got {actual}"
+def test_ex1_file_content_is_string(student_namespace):
+    """Test that file_content is a string"""
+    assert isinstance(student_namespace.get('file_content'), str), "file_content should be a string"
 
 
-class TestExercise3:
-    """Test Exercise 3: Count Lines (25 points)"""
-    
-    def test_line_count_exists(self, student_namespace):
-        assert 'line_count' in student_namespace, "Variable 'line_count' not found"
-    
-    def test_line_count_is_int(self, student_namespace):
-        assert isinstance(student_namespace.get('line_count'), int), "line_count should be an integer"
-    
-    def test_line_count_correct(self, student_namespace):
-        content = student_namespace.get('file_content', '')
-        expected = len(content.split('\n'))
-        actual = student_namespace.get('line_count', 0)
-        assert actual == expected, f"line_count should be {expected}, got {actual}"
+def test_ex1_file_content_has_rubella(student_namespace):
+    """Test that file_content contains Rubella"""
+    content = student_namespace.get('file_content', '')
+    assert 'Rubella' in content, "file_content should contain 'Rubella'"
 
 
-class TestExercise4:
-    """Test Exercise 4: Find Text (25 points)"""
-    
-    def test_symptom_count_exists(self, student_namespace):
-        assert 'symptom_count' in student_namespace, "Variable 'symptom_count' not found"
-    
-    def test_symptom_count_is_int(self, student_namespace):
-        assert isinstance(student_namespace.get('symptom_count'), int), "symptom_count should be an integer"
-    
-    def test_symptom_count_correct(self, student_namespace):
-        content = student_namespace.get('file_content', '')
-        expected = content.lower().count('symptom')
-        actual = student_namespace.get('symptom_count', 0)
-        assert actual == expected, f"symptom_count should be {expected}, got {actual}"
+# ============== Exercise 2: Count Characters (25 points) ==============
+
+def test_ex2_char_count_exists(student_namespace):
+    """Test that char_count variable exists"""
+    assert 'char_count' in student_namespace, "Variable 'char_count' not found"
+
+
+def test_ex2_char_count_is_int(student_namespace):
+    """Test that char_count is an integer"""
+    assert isinstance(student_namespace.get('char_count'), int), "char_count should be an integer"
+
+
+def test_ex2_char_count_correct(student_namespace):
+    """Test that char_count matches file content length"""
+    content = student_namespace.get('file_content', '')
+    expected = len(content)
+    actual = student_namespace.get('char_count', 0)
+    assert actual == expected, f"char_count should be {expected}, got {actual}"
+
+
+# ============== Exercise 3: Count Lines (25 points) ==============
+
+def test_ex3_line_count_exists(student_namespace):
+    """Test that line_count variable exists"""
+    assert 'line_count' in student_namespace, "Variable 'line_count' not found"
+
+
+def test_ex3_line_count_is_int(student_namespace):
+    """Test that line_count is an integer"""
+    assert isinstance(student_namespace.get('line_count'), int), "line_count should be an integer"
+
+
+def test_ex3_line_count_correct(student_namespace):
+    """Test that line_count matches number of lines"""
+    content = student_namespace.get('file_content', '')
+    expected = len(content.split('\n'))
+    actual = student_namespace.get('line_count', 0)
+    assert actual == expected, f"line_count should be {expected}, got {actual}"
+
+
+# ============== Exercise 4: Find Text (25 points) ==============
+
+def test_ex4_symptom_count_exists(student_namespace):
+    """Test that symptom_count variable exists"""
+    assert 'symptom_count' in student_namespace, "Variable 'symptom_count' not found"
+
+
+def test_ex4_symptom_count_is_int(student_namespace):
+    """Test that symptom_count is an integer"""
+    assert isinstance(student_namespace.get('symptom_count'), int), "symptom_count should be an integer"
+
+
+def test_ex4_symptom_count_correct(student_namespace):
+    """Test that symptom_count is correct"""
+    content = student_namespace.get('file_content', '')
+    expected = content.lower().count('symptom')
+    actual = student_namespace.get('symptom_count', 0)
+    assert actual == expected, f"symptom_count should be {expected}, got {actual}"
 
 
 if __name__ == '__main__':

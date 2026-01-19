@@ -33,6 +33,7 @@ htmlcov/
 Thumbs.db
 
 # ----------- LaTeX -----------
+*.tex
 *.aux
 *.log
 *.out
